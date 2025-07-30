@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDebounce } from "react-use";
-import "./App.css";
 import Search from "./components/Search";
-import MovieCard from './components/MovieCard'
+import Spinner from './components/Spinner.jsx'
+import MovieCard from "./components/MovieCard";
+import { getTrendingMovies, updateSearchCount } from './appwrite'
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
 
@@ -83,23 +84,52 @@ function App() {
   }, []);
 
   return (
-    <>
-      <main>
-        <div className="pattern" />
+    <main>
+      <div className="pattern" />
 
-        <div className="wrapper">
-          <header>
-            <img src="/hero.png" alt="Hero Banner" />
-            <h1>
-              Find <span className="text-gradient">Movies</span> You'll Enjoy
-              Without the Hassle
-            </h1>
+      <div className="wrapper">
+        <header>
+          <img src="./hero.png" alt="Hero Banner" />
+          <h1>
+            Find <span className="text-gradient">Movies</span> You'll Enjoy
+            Without the Hassle
+          </h1>
 
-            <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-          </header>
-        </div>
-      </main>
-    </>
+          <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        </header>
+
+        {trendingMovies.length > 0 && (
+          <section className="trending">
+            <h2>Trending Movies</h2>
+
+            <ul>
+              {trendingMovies.map((movie, index) => (
+                <li key={movie.$id}>
+                  <p>{index + 1}</p>
+                  <img src={movie.poster_url} alt={movie.title} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <section className="all-movies">
+          <h2>All Movies</h2>
+
+          {isLoading ? (
+            <Spinner />
+          ) : errorMessage ? (
+            <p className="text-red-500">{errorMessage}</p>
+          ) : (
+            <ul>
+              {movieList.map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </ul>
+          )}
+        </section>
+      </div>
+    </main>
   );
 }
 
