@@ -27,7 +27,7 @@ Built with React.js for the user interface, Appwrite for backend services, and s
 
 👉 **Responsiveness**: Fully responsive design that works seamlessly across devices.
 
-and many more, including code architecture and reusability
+Other features, including code architecture and reusability.
 
 **Running the Project**
 
@@ -37,4 +37,3 @@ npm run dev
 
 Open [http://localhost:5173](http://localhost:5173) in your browser to view the project.
 
-## <a name="snippets">🕸️ Snippets</a>
