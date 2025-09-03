@@ -2,6 +2,8 @@ import React from 'react'
 
 const Search = ({ searchTerm, setSearchTerm }) => {
   console.log("working)")
+  console.log("workingggg 2)")
+
   return (
     <div className="search">
       <div>
