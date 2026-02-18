@@ -1,10 +1,8 @@
 ## <a name="introduction">🤖 Introduction</a>
 
-Built with React.js for the user interface, Appwrite for backend services, and styled with TailwindCSS, this Movie App lets users browse trending movies, search titles, and explore content using the TMDB API. It features a responsive layout and a sleek, modern design.
+Built with React.js for the user interface and styled with TailwindCSS, this Movie App lets users browse popular movies, search titles, and explore content using the TMDB API. It features a responsive layout and a sleek, modern design.
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
-
-- **[Appwrite](https://appwrite.io/)** is an open-source Backend-as-a-Service (BaaS) platform that provides developers with a set of APIs to manage authentication, databases, storage, and more, enabling rapid development of secure and scalable applications.
 
 - **[React.js](https://react.dev/reference/react)** is a JavaScript library developed by Meta for building user interfaces. It allows developers to create reusable UI components that manage their own state, leading to more efficient and predictable code. React is widely used for developing single-page applications (SPAs) due to its virtual DOM that improves performance and ease of maintenance.
 
@@ -21,7 +19,7 @@ Built with React.js for the user interface, Appwrite for backend services, and s
 
 👉 **Search Movies**: Easily search for specific movies using a search function.
 
-👉 **Trending Movies Algorithm**: Displays trending movies based on a dynamic algorithm.
+👉 **Popular Movies Section**: Displays popular movies fetched from TMDB.
 
 👉 **Modern UI/UX**: A sleek and user-friendly interface designed for a great experience.
 
@@ -36,4 +34,3 @@ npm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser to view the project.
-
