@@ -3,9 +3,8 @@ import Search from "./components/Search.jsx";
 import Spinner from "./components/Spinner.jsx";
 import MovieCard from "./components/MovieCard.jsx";
 import { useDebounce } from "react-use";
-import { getTrendingMovies, updateSearchCount } from "./appwrite.js";
 
-const API_BASE_URL = "https://api.themoviedb.org/3";
+const API_BASE_URL = import.meta.env.VITE_TMDB_BASE_URL;
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -25,7 +24,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const [trendingMovies, setTrendingMovies] = useState([]);
+  const [popularMovies, setPopularMovies] = useState([]);
 
   useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
 
@@ -46,17 +45,13 @@ const App = () => {
 
       const data = await response.json();
 
-      if (data.Response === "False") {
-        setErrorMessage(data.Error || "Failed to fetch movies");
+      if (!data.results) {
+        setErrorMessage("Failed to fetch movies");
         setMovieList([]);
         return;
       }
 
-      setMovieList(data.results || []);
-
-      if (query && data.results.length > 0) {
-        await updateSearchCount(query, data.results[0]);
-      }
+      setMovieList(data.results);
     } catch (error) {
       console.error(`Error fetching movies: ${error}`);
       setErrorMessage("Error fetching movies. Please try again later.");
@@ -65,13 +60,21 @@ const App = () => {
     }
   };
 
-  const loadTrendingMovies = async () => {
+  const loadPopularMovies = async () => {
     try {
-      const movies = await getTrendingMovies();
+      const response = await fetch(
+        `${API_BASE_URL}/movie/popular?language=en-US&page=1`,
+        API_OPTIONS
+      );
 
-      setTrendingMovies(movies);
+      if (!response.ok) {
+        throw new Error("Failed to fetch popular movies");
+      }
+
+      const data = await response.json();
+      setPopularMovies(data.results || []);
     } catch (error) {
-      console.error(`Error fetching trending movies: ${error}`);
+      console.error(`Error fetching popular movies: ${error}`);
     }
   };
 
@@ -80,7 +83,7 @@ const App = () => {
   }, [debouncedSearchTerm]);
 
   useEffect(() => {
-    loadTrendingMovies();
+    loadPopularMovies();
   }, []);
 
   return (
@@ -98,15 +101,18 @@ const App = () => {
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
 
-        {trendingMovies.length > 0 && (
+        {popularMovies.length > 0 && (
           <section className="trending">
-            <h2>Trending Movies</h2>
+            <h2>Popular Movies</h2>
 
             <ul>
-              {trendingMovies.map((movie, index) => (
-                <li key={movie.$id}>
+              {popularMovies.slice(0, 5).map((movie, index) => (
+                <li key={movie.id}>
                   <p>{index + 1}</p>
-                  <img src={movie.poster_url} alt={movie.title} />
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.title}
+                  />
                 </li>
               ))}
             </ul>
